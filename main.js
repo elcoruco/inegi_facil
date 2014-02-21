@@ -1,16 +1,10 @@
-var plugin = function(form, adjust, debug){
-  var debug = debug || false;
-  // check if google is avaliable
-  try{
-  }
-  catch(e){
-  }
+//     INEGI_apps 0.1
+//     (c) 2014 El coruco
+//     INEGI_apps may be freely distributed under the MIT license.
+//     For all details and documentation:
+//     http://inegifacil.com/apps
+//     based on the Backbone implementation
 
-  // check if form is avaliable
-  try{
-  }
-  catch(e){
-  }
-
-  //check if geolocalization is avaliable
-};
+(function(root, factory){
+}(this, function(root, exports, google.maps){
+})
