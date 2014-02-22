@@ -19,6 +19,7 @@
   // define the basic properties
   INEGI_apps.VERSION = '0.1';
   INEGI_apps.maps = google_maps;
+  INEGI_apps.default_zoom = 8;
   INEGI_apps.geolocation = geolocation;
   INEGI_apps.geolocation_point = false;
   INEGI_apps.geolocation_callback = false;
@@ -39,6 +40,12 @@
   var geo_error = function(e){
     INEGI_apps.geolocation_point = false;
   };
+
+  // define the the google maps point trace
+  INEGI_apps.maps_drawpoint = function(el, point, zoom){
+    var zoom = isNaN(zoom) ? INEGI_apps.default_zoom : zoom;
+  };
+
 
   return INEGI_apps;
 }));
