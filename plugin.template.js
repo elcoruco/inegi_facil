@@ -2,10 +2,13 @@
 
   var pluginName = "captureGeolocation",
   defaults ={
-    type : 'simple',
+    getGoogleMaps : true,
     prefix : 'geo_',
     callback : false,
-    fail : 'silent',
+    failSilent : false,
+    failGeolocation : 'the geolocation is not avaliable',
+    failGoogleMaps : 'the google maps api is not avaliable',
+    failuser : 'the geolocation fails x_____x #sadpanda',
     failTag : 'p'
   };
 
@@ -25,10 +28,34 @@
   // plugin methods
   Plugin.prototype = {
     init : function(){
-      this.fail();
+      this.hasGeolocation = this.checkGeolocation();
+      this.hasGoogleMaps = this.checkGoogleMaps();
+      // check if the plugin can do anything
+      if( !this.hasGeolocation ){
+        this.fail( this.failGeolocation );
+	return;
+      }
+      else if( !this.hasGoogleMaps && this.getGoogleMaps ){
+        this.fail( this.failGoogleMaps );
+	return;
+      }
+
+      // get the location
+      this.geolocation();
     },
 
-    geolocation : function( callback ){
+    geolocation : function(){
+      var success = $.proxy(this.geoSuccess, this);
+      var fail = $.proxy(this.geoFail, this);
+      navigator.geolocation.getCurrentPosition(success, fail);
+    },
+
+    geoSuccess : function( point ){
+      console.log( point );
+    },
+
+    geoFail : function(){
+      this.fail( this.failUser );
     },
 
     restart : function(){
@@ -37,19 +64,19 @@
     toForm : function(){
     },
 
-    fail : function(){
-      if(this.options.fail !== "silent"){
+    fail : function( content ){
+      if( ! this.options.failSilent ){
         var message = $("<" + this.options.failTag + ">");
-        $(this.element).prepend( message.html(this.options.fail));
+        $(this.element).prepend( message.html( content ));
       }
     },
 
-    _checkGeolocation : function(){
-      return !typeof navigator.geolocation === 'undefined';
+    checkGeolocation : function(){
+      return navigator && navigator.geolocation ? true : false;
     },
 
-    _ceckGoogleMaps : function(){
-      return !typeof document.google.maps === 'undefined';
+    checkGoogleMaps : function(){
+      return window && window.google.maps ? true : false;
     }
   };
 
