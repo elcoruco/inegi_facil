@@ -51,14 +51,39 @@
     },
 
     geoSuccess : function( point ){
-      console.log( point );
+      this.singlePoint = point;
+      var toForm = $.proxy(this.toForm, this);
+      var geocoding = $.proxy(this.geocoding, this);
+      
+      // check if google maps is not needed && execute
+      if( this.options.getGoogleMaps && this.hasGoogleMaps){
+        geocoding();
+      }
+      else{
+        toForm();
+        return;
+      }
+      
     },
 
     geoFail : function(){
       this.fail( this.failUser );
     },
 
-    restart : function(){
+    geocoding : function(){
+      var geocoder = new google.maps.Geocoder();
+      var success = $.proxy(this.geocodingSuccess, this);
+      var latitude = this.singlePoint.coords.latitude;
+      var longitude = this.singlePoint.coords.longitude;
+      var latlng = new google.maps.LatLng(latitude, longitude);
+      geocoder.geocode( { location : latlng }, success );
+    },
+
+    geocodingSuccess : function( results, status ){
+      console.log(results, status);
+    },
+
+    geocodingFail : function(){
     },
 
     toForm : function(){
