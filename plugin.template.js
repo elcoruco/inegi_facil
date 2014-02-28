@@ -80,10 +80,17 @@
     },
 
     geocodingSuccess : function( results, status ){
-      console.log(results, status);
+      var fail = $.proxy(this.geocodingFail, this);
+      // success 
+      if( status == google.maps.GeocoderStatus.OK){
+      }
+      // miserable fail
+      else{
+        fail( status );
+      }
     },
 
-    geocodingFail : function(){
+    geocodingFail : function( message ){
     },
 
     toForm : function(){
